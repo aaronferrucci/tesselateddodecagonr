@@ -19,7 +19,7 @@ Back on the small scale, I documented the method of construction, using
 PostScript to draw the figures: http://www.antfarm.org/~aaronf/td/tdhowto.html
 
 ## Motivation
-My goal is to tesselate a dodecagon using R and ggplotwith the final result
+My goal is to tesselate a dodecagon using R and ggplot, with the final result
 rendered as an animated GIF. The ulterior motive is to see how well
 these tools work for geometric depiction.
 
