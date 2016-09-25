@@ -23,3 +23,5 @@ My goal is to tesselate a dodecagon using R and ggplot, with the final result
 rendered as an animated GIF. The ulterior motive is to see how well
 these tools work for geometric depiction.
 
+![A tesselation](https://github.com/aaronferrucci/tesselateddodecagonr/blob/master/anim.gif)
+
