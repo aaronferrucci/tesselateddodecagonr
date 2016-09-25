@@ -2,7 +2,7 @@ library(animation)
 source("main.R")
 
 trace.animate <- function () {
-  plots
+  lapply(plots, function(x) print(x))
 }
 
 saveGIF(trace.animate(), interval=1.0, movie.name="anim.gif")
