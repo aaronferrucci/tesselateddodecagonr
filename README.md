@@ -9,13 +9,13 @@
 
 ## History
 I first learned how to tesselate a dodecagon from Col. Robert S. Beard's
-"patterns in space" (https://www.goodreads.com/book/show/2677592-patterns-in-space). At first I saw it as an exercise to be done while sitting at a desk, with compass-and-straightedge. Later, in 1999, I realized the pattern on a more human scale:
+"patterns in space" (https://www.goodreads.com/book/show/2677592-patterns-in-space). I saw it as an exercise to be done while sitting at a desk, with compass-and-straightedge. Later, in 1999, I realized the pattern on a grander scale:
 
 * http://www.antfarm.org/~aaronf/id99/html/23.html
 * http://www.antfarm.org/~aaronf/bman99/html/nightlist_7_td10.html
 * http://www.antfarm.org/~aaronf/bman99/html/daylist_4_td4.html
 
-Back on the small scale, I documented the method of construction, using
+I documented the method of construction, using
 PostScript to draw the figures: http://www.antfarm.org/~aaronf/td/tdhowto.html
 
 ## Motivation
