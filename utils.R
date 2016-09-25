@@ -21,3 +21,9 @@ polar_point <- function(r, theta) {
 draw_line <- function(start, end, color="black") {
   annotate("segment", x = start[1], xend = end[1], y = start[2], yend = end[2], color = color)
 }
+
+rotate <- function(x, theta) {
+  m <- matrix(c(cos(theta), sin(theta), -sin(theta), cos(theta)), nrow=2, ncol=2)
+  v <- m %*% x
+  return(as.vector(v))
+}

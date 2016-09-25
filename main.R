@@ -1,5 +1,7 @@
 library(ggplot2)
+
 source("utils.R")
+
 g <- ggplot() + coord_fixed(1) + expand_limits(x = c(-2, 2), y = c(-2, 2)) +
   theme(
     axis.text.x=element_blank(),
@@ -113,5 +115,76 @@ g15 <- g +
   lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
   lapply(1:12, FUN=function(i) draw_line(inner_pts[[i]], inner_pts[[(i %% 12) + 1]])) +
   lapply(inner_pts, FUN=function(x) draw_point(x)) +
+  lapply(pts, FUN=function(x) draw_point(x))
+
+g16 <- g +
+  draw_point(origin) +
+  lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
+  lapply(1:12, FUN=function(i) draw_line(inner_pts[[i]], inner_pts[[(i %% 12) + 1]])) +
+  lapply(1:1, FUN=function(i) draw_circle(0.5, inner_pts[[i]])) +
+  lapply(inner_pts, FUN=function(x) draw_point(x)) +
+  lapply(pts, FUN=function(x) draw_point(x))
+
+g17 <- g +
+  draw_point(origin) +
+  lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
+  lapply(1:12, FUN=function(i) draw_line(inner_pts[[i]], inner_pts[[(i %% 12) + 1]])) +
+  lapply(1:2, FUN=function(i) draw_circle(0.5, inner_pts[[i]])) +
+  lapply(inner_pts, FUN=function(x) draw_point(x)) +
+  lapply(pts, FUN=function(x) draw_point(x))
+
+g18 <- g +
+  draw_point(origin) +
+  lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
+  lapply(1:12, FUN=function(i) draw_line(inner_pts[[i]], inner_pts[[(i %% 12) + 1]])) +
+  lapply(1:12, FUN=function(i) draw_circle(0.5, inner_pts[[i]])) +
+  lapply(inner_pts, FUN=function(x) draw_point(x)) +
+  lapply(pts, FUN=function(x) draw_point(x))
+
+g19 <- g +
+  draw_point(origin) +
+  lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
+  lapply(1:12, FUN=function(i) draw_line(inner_pts[[i]], inner_pts[[(i %% 12) + 1]])) +
+  lapply(1:12, FUN=function(i) draw_circle(0.5, inner_pts[[i]])) +
+  lapply(inner_pts, FUN=function(x) draw_point(x)) +
+  lapply(inner_pts, FUN=function(x) draw_point(x + c(0.5, 0))) +
+  lapply(pts, FUN=function(x) draw_point(x))
+
+g20 <- g +
+  draw_point(origin) +
+  lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
+  lapply(1:12, FUN=function(i) draw_circle(0.5, inner_pts[[i]])) +
+  lapply(inner_pts, FUN=function(x) draw_point(x)) +
+  lapply(0:11,
+    function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
+  ) +
+  lapply(pts, FUN=function(x) draw_point(x))
+
+g21 <- g +
+  draw_point(origin) +
+  lapply(0:11,
+         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
+  ) +
+  lapply(1:12, function(i) {draw_line(rotate(inner_pts[[i]] + c(0.5, 0), 0), rotate(inner_pts[[(i %% 12) + 1]] + c(0.5, 0), 0)) } ) +
+  lapply(pts, FUN=function(x) draw_point(x))
+
+g22 <- g +
+  draw_point(origin) +
+  lapply(0:11,
+         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
+  ) +
+  lapply(1:12, function(i) {draw_line(rotate(inner_pts[[i]] + c(0.5, 0), 0), rotate(inner_pts[[(i %% 12) + 1]] + c(0.5, 0), 0)) } ) +
+  lapply(1:12, function(i) {draw_line(rotate(inner_pts[[i]] + c(0.5, 0), pi/6), rotate(inner_pts[[(i %% 12) + 1]] + c(0.5, 0), pi/6)) } ) +
+  lapply(pts, FUN=function(x) draw_point(x))
+
+g23 <- g +
+  draw_point(origin) +
+  lapply(0:11,
+         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
+  ) +
+  lapply(0:11, 
+    function(i) 
+      lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
+  ) +
   lapply(pts, FUN=function(x) draw_point(x))
 
