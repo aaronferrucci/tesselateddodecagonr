@@ -31,110 +31,144 @@ stage <- 0
 # 1 plot a point at the origin
 stage <- stage + 1
 pts <- list(origin)
-plots[[stage]] <- g + profile_limits(stage) + lapply(pts, FUN=function(x) draw_point(x))
+plots[[stage]] <- g + profile_limits(stage) + lapply(pts, FUN=function(x) draw_new_point(x))
 
 # 2 circle centered at the origin, line to 0, 1
 stage <- stage + 1
-pts <- c(pts, list(polar_point(1, pi / 2)))
+new_pts <- list(polar_point(1, pi / 2))
 plots[[stage]] <- g + profile_limits(stage) + draw_line(origin, c(0, 1)) + draw_circle(1, origin) +
-  lapply(pts, FUN=function(x) draw_point(x))
+  lapply(pts, FUN=function(x) draw_point(x)) +
+  lapply(new_pts, FUN=function(x) draw_new_point(x))
+pts <- c(pts, new_pts)
 
 # 3 another circle, centered at 0, 1
 stage <- stage + 1
-pts <- c(pts, list(polar_point(1, pi/6)))
-pts <- c(pts, list(polar_point(1, 5*pi/6)))
+new_pts <- c(list(polar_point(1, 5*pi/6)), list(polar_point(1, pi/6)))
 plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) + draw_circle(1, pts[[2]]) +
-  lapply(pts, FUN=function(x) draw_point(x))
+  lapply(pts, FUN=function(x) draw_point(x)) +
+  lapply(new_pts, FUN=function(x) draw_new_point(x))
+pts <- c(pts, new_pts)
 
 # 4 two more circles centered at the intersections of the previous new circle
 stage <- stage + 1
-pts <- c(pts, list(polar_point(1, -pi/6)))
-pts <- c(pts, list(polar_point(1, 7*pi/6)))
+new_pts <- c(list(polar_point(1, 7*pi/6)), list(polar_point(1, -pi/6)))
 plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) + draw_circle(1, pts[[3]]) + draw_circle(1, pts[[4]]) +
-  lapply(pts, FUN=function(x) draw_point(x))
+  lapply(pts, FUN=function(x) draw_point(x)) +
+  lapply(new_pts, FUN=function(x) draw_new_point(x))
+pts <- c(pts, new_pts)
 
 # 5 continuing with two more circles, and new points at the intersection
 stage <- stage + 1
-pts <- c(pts, list(polar_point(1, -pi/2)))
+new_pts <- list(polar_point(1, -pi/2))
 plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) + draw_circle(1, pts[[5]]) + draw_circle(1, pts[[6]]) +
-  lapply(pts, FUN=function(x) draw_point(x))
+  lapply(pts, FUN=function(x) draw_point(x)) +
+  lapply(new_pts, FUN=function(x) draw_new_point(x))
+pts <- c(pts, new_pts)
+
+# Up to now, points have been added in somewhat random order.
+# Recreate the points in order, counter-clockwise around the circle.
+pts <- lapply(0:11 * pi/6, FUN = function(theta) polar_point(1, theta)) 
 
 # 6 connect all the points, for a hexagon
 stage <- stage + 1
 plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) +
-  draw_line(pts[[3]], pts[[2]]) + draw_line(pts[[2]], pts[[4]]) + draw_line(pts[[4]], pts[[6]]) +
-  draw_line(pts[[6]], pts[[7]]) +
-  draw_line(pts[[7]], pts[[5]]) +
-  draw_line(pts[[5]], pts[[3]]) +
-  lapply(pts, FUN=function(x) draw_point(x))
+  draw_line(pts[[2]], pts[[4]]) +
+  draw_line(pts[[4]], pts[[6]]) +
+  draw_line(pts[[6]], pts[[8]]) +
+  draw_line(pts[[8]], pts[[10]]) +
+  draw_line(pts[[10]], pts[[12]]) +
+  draw_line(pts[[12]], pts[[2]]) +
+  lapply(pts[seq(2, 12, 2)], FUN=function(x) draw_point(x))
 
 # 7 circle of radius 0.6, at one of the points
 stage <- stage + 1
 plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) +
-  draw_circle(.6, pts[[3]]) +
-  draw_line(pts[[3]], pts[[2]]) + draw_line(pts[[2]], pts[[4]]) + draw_line(pts[[4]], pts[[6]]) +
-  draw_line(pts[[6]], pts[[7]]) +
-  draw_line(pts[[7]], pts[[5]]) +
-  draw_line(pts[[5]], pts[[3]]) +
-  lapply(pts, FUN=function(x) draw_point(x))
+  draw_circle(.6, pts[[2]]) +
+  draw_line(pts[[2]], pts[[4]]) +
+  draw_line(pts[[4]], pts[[6]]) +
+  draw_line(pts[[6]], pts[[8]]) +
+  draw_line(pts[[8]], pts[[10]]) +
+  draw_line(pts[[10]], pts[[12]]) +
+  draw_line(pts[[12]], pts[[2]]) +
+  lapply(pts[seq(2, 12, 2)], FUN=function(x) draw_point(x))
 
 # 8 ... and another circle of radius 0.6, at an adjacent point
 stage <- stage + 1
 plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) +
-  draw_circle(.6, pts[[3]]) + draw_circle(0.6, pts[[2]]) +
-  draw_line(pts[[3]], pts[[2]]) + draw_line(pts[[2]], pts[[4]]) + draw_line(pts[[4]], pts[[6]]) +
-  draw_line(pts[[6]], pts[[7]]) +
-  draw_line(pts[[7]], pts[[5]]) +
-  draw_line(pts[[5]], pts[[3]]) +
-  lapply(pts, FUN=function(x) draw_point(x))
+  draw_circle(.6, pts[[2]]) + draw_circle(0.6, pts[[4]]) +
+  draw_line(pts[[2]], pts[[4]]) +
+  draw_line(pts[[4]], pts[[6]]) +
+  draw_line(pts[[6]], pts[[8]]) +
+  draw_line(pts[[8]], pts[[10]]) +
+  draw_line(pts[[10]], pts[[12]]) +
+  draw_line(pts[[12]], pts[[2]]) +
+  lapply(pts[seq(2, 12, 2)], FUN=function(x) draw_point(x))
 
 # 9 draw a line at the two 0.6 radius circles' intersections... and a point at the intersection of that line and the original circle
 stage <- stage + 1
-pts <- c(pts, list(polar_point(1, pi/3)))
 plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) +
-  draw_circle(.6, pts[[3]]) + draw_circle(0.6, pts[[2]]) +
-  draw_line(pts[[3]], pts[[2]]) + draw_line(pts[[2]], pts[[4]]) + draw_line(pts[[4]], pts[[6]]) +
-  draw_line(pts[[6]], pts[[7]]) +
-  draw_line(pts[[7]], pts[[5]]) +
-  draw_line(pts[[5]], pts[[3]]) +
+  draw_circle(.6, pts[[2]]) + draw_circle(0.6, pts[[4]]) +
+  draw_line(pts[[2]], pts[[4]]) +
+  draw_line(pts[[4]], pts[[6]]) +
+  draw_line(pts[[6]], pts[[8]]) +
+  draw_line(pts[[8]], pts[[10]]) +
+  draw_line(pts[[10]], pts[[12]]) +
+  draw_line(pts[[12]], pts[[2]]) +
   draw_line(polar_point(0.25, pi/3), polar_point(1.75, pi/3)) +
-  lapply(pts, FUN=function(x) draw_point(x))
+  lapply(pts[seq(2, 12, 2)], FUN=function(x) draw_point(x)) +
+  draw_new_point(pts[[3]])
 
 # 10 new circle, radius 1, at the point of intersection created by the line in the previous step.
 stage <- stage + 1
-pts <- c(pts, list(polar_point(1, 0)))
-pts <- c(pts, list(polar_point(1, 2*pi/3)))
-plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) + draw_circle(1, polar_point(1, pi/3)) +
-  draw_line(pts[[3]], pts[[2]]) + draw_line(pts[[2]], pts[[4]]) + draw_line(pts[[4]], pts[[6]]) +
-  draw_line(pts[[6]], pts[[7]]) +
-  draw_line(pts[[7]], pts[[5]]) +
-  draw_line(pts[[5]], pts[[3]]) +
-  lapply(pts, FUN=function(x) draw_point(x))
+plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) + draw_circle(1, pts[[3]]) +
+  draw_line(pts[[2]], pts[[4]]) +
+  draw_line(pts[[4]], pts[[6]]) +
+  draw_line(pts[[6]], pts[[8]]) +
+  draw_line(pts[[8]], pts[[10]]) +
+  draw_line(pts[[10]], pts[[12]]) +
+  draw_line(pts[[12]], pts[[2]]) +
+  lapply(pts[seq(2, 12, 2)], FUN=function(x) draw_point(x)) +
+  draw_point(pts[[3]]) +
+  lapply(list(pts[[1]], pts[[5]]), FUN=function(x) draw_new_point(x))
 
 # 11 two new circles, radius 1, centered at the two new points of intersection
 stage <- stage + 1
-pts <- c(pts, list(polar_point(1, -pi/3)))
-pts <- c(pts, list(polar_point(1, pi)))
-plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) + draw_circle(1, polar_point(1, 0)) + draw_circle(1, polar_point(1, 2*pi/3)) +
-  draw_line(pts[[3]], pts[[2]]) + draw_line(pts[[2]], pts[[4]]) + draw_line(pts[[4]], pts[[6]]) +
-  draw_line(pts[[6]], pts[[7]]) +
-  draw_line(pts[[7]], pts[[5]]) +
-  draw_line(pts[[5]], pts[[3]]) +
-  lapply(pts, FUN=function(x) draw_point(x))
+plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) +
+  draw_circle(1, pts[[1]]) +
+  draw_circle(1, pts[[5]]) +
+  draw_line(pts[[2]], pts[[4]]) +
+  draw_line(pts[[4]], pts[[6]]) +
+  draw_line(pts[[6]], pts[[8]]) +
+  draw_line(pts[[8]], pts[[10]]) +
+  draw_line(pts[[10]], pts[[12]]) +
+  draw_line(pts[[12]], pts[[2]]) +
+  lapply(pts[seq(2, 12, 2)], FUN=function(x) draw_point(x)) +
+  draw_point(pts[[3]]) +
+  draw_point(pts[[1]]) +
+  draw_point(pts[[5]]) +
+  lapply(list(pts[[11]], pts[[7]]), FUN=function(x) draw_new_point(x))
 
 # 12 two more circles, centered at the points created in the previous step
 stage <- stage + 1
-pts <- c(pts, list(polar_point(1, 4*pi/3)))
-plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) + draw_circle(1, polar_point(1, -pi/3)) + draw_circle(1, polar_point(1, pi)) +
-  draw_line(pts[[3]], pts[[2]]) + draw_line(pts[[2]], pts[[4]]) + draw_line(pts[[4]], pts[[6]]) +
-  draw_line(pts[[6]], pts[[7]]) +
-  draw_line(pts[[7]], pts[[5]]) +
-  draw_line(pts[[5]], pts[[3]]) +
-  lapply(pts, FUN=function(x) draw_point(x))
+plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) +
+  draw_circle(1, pts[[11]]) +
+  draw_circle(1, pts[[7]]) +
+  draw_line(pts[[2]], pts[[4]]) +
+  draw_line(pts[[4]], pts[[6]]) +
+  draw_line(pts[[6]], pts[[8]]) +
+  draw_line(pts[[8]], pts[[10]]) +
+  draw_line(pts[[10]], pts[[12]]) +
+  draw_line(pts[[12]], pts[[2]]) +
+  lapply(pts[seq(2, 12, 2)], FUN=function(x) draw_point(x)) +
+  draw_point(pts[[3]]) +
+  draw_point(pts[[1]]) +
+  draw_point(pts[[5]]) +
+  draw_point(pts[[7]]) +
+  draw_point(pts[[11]]) +
+  draw_new_point(pts[[9]])
 
 # 13 draw the dodecagon and the circle 
 stage <- stage + 1
-pts <- lapply(0:11 * pi/6, FUN = function(theta) polar_point(1, theta)) 
 plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) +
   draw_point(origin) +
   lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
@@ -148,7 +182,7 @@ plots[[stage]] <- g + profile_limits(stage) + draw_circle(1, origin) +
   lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
   lapply(1:12, FUN=function(i) draw_line(inner_pts[[i]], inner_pts[[(i %% 12) + 1]])) +
   lapply(0:11, FUN=function(i) draw_line(origin, polar_point(1, i*pi/6))) +
-  lapply(inner_pts, FUN=function(x) draw_point(x)) +
+  lapply(inner_pts, FUN=function(x) draw_new_point(x)) +
   lapply(pts, FUN=function(x) draw_point(x))
 
 # 15 two nested dodecagons
@@ -160,6 +194,7 @@ plots[[stage]] <- g + profile_limits(stage) +
   lapply(inner_pts, FUN=function(x) draw_point(x)) +
   lapply(pts, FUN=function(x) draw_point(x))
 
+# TODO start here
 # 16 circle of radius 0.5 centered at one of the inner dodecagon points
 stage <- stage + 1
 plots[[stage]] <- g + profile_limits(stage) +
