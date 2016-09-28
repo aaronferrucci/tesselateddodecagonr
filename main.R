@@ -3,16 +3,20 @@ library(ggplot2)
 source("utils.R")
 
 label <- function(g, stage) {
-  return(g + annotate("text", x=0, y=-1.2, label=stage))
+  # debug
+  # return(g + annotate("text", x=0, y=-1.2, label=stage))
+  return(g)
 }
 
 profile_limits <- function(stage) {
   full_zoom <- 2
+  end_stage <- 53
+  end_zoom <- 1
   if (stage <= 12) {
     zoom <- full_zoom
+  } else if (stage > end_stage) {
+    zoom <- end_zoom
   } else {
-    end_stage <- 53
-    end_zoom <- 1
     delta <- (full_zoom - end_zoom) / (end_stage - 12)
     zoom <- full_zoom - delta * (stage - 12)
   }
@@ -205,7 +209,7 @@ plots[[stage]] <- label(g, stage) + profile_limits(stage) + draw_circle(1, origi
   lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
   lapply(1:12, FUN=function(i) draw_line(inner_pts[[i]], inner_pts[[(i %% 12) + 1]])) +
   lapply(0:11, FUN=function(i) draw_line(origin, polar_point(1, i*pi/6))) +
-  lapply(inner_pts, FUN=function(x) draw_new_point(x)) +
+  lapply(inner_pts, FUN=function(x) draw_point(x)) +
   lapply(pts, FUN=function(x) draw_point(x))
 
 # 15 two nested dodecagons

@@ -8,8 +8,8 @@ draw_circle <- function(r, center, color="black", fill=NA, ...) {
   annotate("ribbon", x=x, ymin=ymin, ymax=ymax, color=color, fill=fill, ...)
 }
 
-draw_point <- function(pt, color="red") {
-  draw_circle(0.02, pt, color)
+draw_point <- function(pt, color="blue") {
+  draw_circle(0.02, pt, color, color)
 }
 
 draw_new_point <- function(pt, color="red") {
