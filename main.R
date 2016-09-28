@@ -26,8 +26,6 @@ profile_limits <- function(stage) {
 
 g <- ggplot() + coord_fixed(1) +
   theme(
-    panel.grid.major=element_blank(),
-    panel.grid.minor=element_blank(),
     axis.text.x=element_blank(),
     axis.text.y=element_blank(),
     axis.title.x=element_blank(),
