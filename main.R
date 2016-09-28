@@ -11,7 +11,7 @@ profile_limits <- function(stage) {
   if (stage <= 12) {
     zoom <- full_zoom
   } else {
-    end_stage <- 48
+    end_stage <- 53
     end_zoom <- 1
     delta <- (full_zoom - end_zoom) / (end_stage - 12)
     zoom <- full_zoom - delta * (stage - 12)
@@ -180,6 +180,25 @@ plots[[stage]] <- label(g, stage) + profile_limits(stage) + draw_circle(1, origi
 
 # 14 lines from the origin to the outer circle points; intersections with a circle of radius 0.5 define a smaller dodecagon 
 stage <- stage + 1
+plots[[stage]] <- label(g, stage) + profile_limits(stage) + draw_circle(1, origin) +
+  draw_point(origin) +
+  lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
+  lapply(0:11, FUN=function(i) draw_line(origin, polar_point(1, i*pi/6))) +
+  lapply(pts, FUN=function(x) draw_point(x))
+
+#2nd part
+inner_pts <- lapply(0:11 * pi/6, FUN = function(theta) polar_point(0.5, theta))
+stage <- stage + 1
+inner_pts <- lapply(0:11 * pi/6, FUN = function(theta) polar_point(0.5, theta))
+plots[[stage]] <- label(g, stage) + profile_limits(stage) + draw_circle(1, origin) +
+  draw_circle(0.5, origin) +
+  draw_point(origin) +
+  lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
+  lapply(0:11, FUN=function(i) draw_line(origin, polar_point(1, i*pi/6))) +
+  lapply(inner_pts, FUN=function(x) draw_new_point(x)) +
+  lapply(pts, FUN=function(x) draw_point(x))
+
+stage <- stage + 1
 inner_pts <- lapply(0:11 * pi/6, FUN = function(theta) polar_point(0.5, theta))
 plots[[stage]] <- label(g, stage) + profile_limits(stage) + draw_circle(1, origin) +
   draw_point(origin) +
@@ -211,6 +230,7 @@ for (loop in 1:12) {
 }
 
 # 28 points of intersection
+# consider removing the inner dodecagon
 stage <- stage + 1
 plots[[stage]] <- label(g, stage) + profile_limits(stage) +
   draw_point(origin) +
@@ -221,6 +241,7 @@ plots[[stage]] <- label(g, stage) + profile_limits(stage) +
   lapply(inner_pts, FUN=function(x) draw_new_point(rotate(x + c(0.5, 0), 0 * pi/6))) +
   lapply(pts, FUN=function(x) draw_point(x))
 
+# 29 - 41
 for (loop in 1:11) {
   # 29 points at each inner circle intersection
   stage <- stage + 1
@@ -229,300 +250,39 @@ for (loop in 1:11) {
     lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
     lapply(1:12, FUN=function(i) draw_circle(0.5, inner_pts[[i]])) +
     lapply(inner_pts, FUN=function(x) draw_point(x)) +
-    lapply(0:loop - 1,
+    lapply(0:(loop - 1),
            function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
     ) +
     lapply(inner_pts, FUN=function(x) draw_new_point(rotate(x + c(0.5, 0), loop * pi/6))) +
     lapply(pts, FUN=function(x) draw_point(x))
 }
 
-# old
-# 30 points at each inner circle intersection
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
-  lapply(1:12, FUN=function(i) draw_circle(0.5, inner_pts[[i]])) +
-  lapply(inner_pts, FUN=function(x) draw_point(x)) +
-  lapply(0:1,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(2:2,
-         function(i) lapply(inner_pts, FUN=function(x) draw_new_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
+# 30 drop the circles, draw small dodecagons
+for (loop in 0:11) {
+  stage <- stage + 1
+  plots[[stage]] <- label(g, stage) + profile_limits(stage) +
+    draw_point(origin) +
+    lapply(0:11,
+           function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
+    ) +
+    lapply(0:loop, 
+           function(i) 
+             lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
+    ) +
+    lapply(pts, FUN=function(x) draw_point(x))
+}
 
-# 31 points at each inner circle intersection
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
-  lapply(1:12, FUN=function(i) draw_circle(0.5, inner_pts[[i]])) +
-  lapply(inner_pts, FUN=function(x) draw_point(x)) +
-  lapply(0:2,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(inner_pts, FUN=function(x) draw_new_point(rotate(x + c(0.5, 0), 3 * pi/6))) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 32 points at each inner circle intersection
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(1:12, FUN=function(i) draw_line(pts[[i]], pts[[(i %% 12) + 1]])) +
-  lapply(1:12, FUN=function(i) draw_circle(0.5, inner_pts[[i]])) +
-  lapply(inner_pts, FUN=function(x) draw_point(x)) +
-  lapply(0:3,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(inner_pts, FUN=function(x) draw_new_point(rotate(x + c(0.5, 0), 4 * pi/6))) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# old stuff
-# 30 drop the circles, draw a small dodecagon
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:0, 
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 31 and another small dodecagon
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:1,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 32 ... and another...
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:2,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 33 ... and another...
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:3,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 34 ... and another...
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:4,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 35 ... and another...
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:5,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 36 ... and another...
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:6,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 37 ... and another...
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:7,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 38 ... and another...
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:8,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 39 ... and another...
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:9,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 40 ... and another...
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:10,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 41 ... and the last.
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:11,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 42 ... repeat last step
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:11,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 43 ... repeat last step.
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:11,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 44 ... repeat last step.
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:11,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 45 ... repeat last step.
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:11,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 46 ... repeat last step.
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:11,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 47 ... repeat last step.
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:11,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
-# 48 ... repeat last step.
-stage <- stage + 1
-plots[[stage]] <- g + profile_limits(stage) +
-  draw_point(origin) +
-  lapply(0:11,
-         function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-  ) +
-  lapply(0:11,
-         function(i) 
-           lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
-  ) +
-  lapply(pts, FUN=function(x) draw_point(x))
-
+# 53-59 ... repeat last step
+for (loop in 0:5) {
+  stage <- stage + 1
+  plots[[stage]] <- label(g, stage) + profile_limits(stage) +
+    draw_point(origin) +
+    lapply(0:11,
+           function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
+    ) +
+    lapply(0:11,
+           function(i) 
+             lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
+    ) +
+    lapply(pts, FUN=function(x) draw_point(x))
+}
