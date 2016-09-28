@@ -26,6 +26,8 @@ profile_limits <- function(stage) {
 
 g <- ggplot() + coord_fixed(1) +
   theme(
+    panel.grid.major=element_blank(),
+    panel.grid.minor=element_blank(),
     axis.text.x=element_blank(),
     axis.text.y=element_blank(),
     axis.title.x=element_blank(),
@@ -242,8 +244,8 @@ plots[[stage]] <- label(g, stage) + profile_limits(stage) +
   lapply(1:12, FUN=function(i) draw_line(inner_pts[[i]], inner_pts[[(i %% 12) + 1]])) +
   lapply(1:12, FUN=function(i) draw_circle(0.5, inner_pts[[i]])) +
   lapply(inner_pts, FUN=function(x) draw_point(x)) +
-  lapply(inner_pts, FUN=function(x) draw_new_point(rotate(x + c(0.5, 0), 0 * pi/6))) +
-  lapply(pts, FUN=function(x) draw_point(x))
+  lapply(pts, FUN=function(x) draw_point(x)) +
+  lapply(inner_pts, FUN=function(x) draw_new_point(rotate(x + c(0.5, 0), 0 * pi/6)))
 
 # 29 - 41
 for (loop in 1:11) {
@@ -257,8 +259,8 @@ for (loop in 1:11) {
     lapply(0:(loop - 1),
            function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
     ) +
-    lapply(inner_pts, FUN=function(x) draw_new_point(rotate(x + c(0.5, 0), loop * pi/6))) +
-    lapply(pts, FUN=function(x) draw_point(x))
+    lapply(pts, FUN=function(x) draw_point(x)) +
+    lapply(inner_pts, FUN=function(x) draw_new_point(rotate(x + c(0.5, 0), loop * pi/6)))
 }
 
 # 30 drop the circles, draw small dodecagons
@@ -266,12 +268,12 @@ for (loop in 0:11) {
   stage <- stage + 1
   plots[[stage]] <- label(g, stage) + profile_limits(stage) +
     draw_point(origin) +
-    lapply(0:11,
-           function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-    ) +
     lapply(0:loop, 
            function(i) 
              lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
+    ) +
+    lapply(0:11,
+           function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
     ) +
     lapply(pts, FUN=function(x) draw_point(x))
 }
@@ -282,11 +284,11 @@ for (loop in 0:5) {
   plots[[stage]] <- label(g, stage) + profile_limits(stage) +
     draw_point(origin) +
     lapply(0:11,
-           function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
-    ) +
-    lapply(0:11,
            function(i) 
              lapply(1:12, function(j) {draw_line(rotate(inner_pts[[j]] + c(0.5, 0), i * pi/6), rotate(inner_pts[[(j %% 12) + 1]] + c(0.5, 0), i*pi/6)) } )
+    ) +
+    lapply(0:11,
+           function(i) lapply(inner_pts, FUN=function(x) draw_point(rotate(x + c(0.5, 0), i * pi/6)))
     ) +
     lapply(pts, FUN=function(x) draw_point(x))
 }
