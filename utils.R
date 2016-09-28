@@ -9,11 +9,11 @@ draw_circle <- function(r, center, color="black", fill=NA, ...) {
 }
 
 draw_point <- function(pt, color="blue") {
-  draw_circle(0.02, pt, color, color)
+  draw_circle(0.04, pt, color, color)
 }
 
 draw_new_point <- function(pt, color="red") {
-  draw_circle(0.02, pt, color, color)
+  draw_circle(0.04, pt, color, color)
 }
 
 polar_point <- function(r, theta) {
